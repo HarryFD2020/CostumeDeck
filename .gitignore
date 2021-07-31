@@ -1,2 +1,9 @@
-DeckProj/Temp/UnityLockfile
-DeckProj/Library/Artifacts/
+DeckProj/Library/
+DeckProj/Temp
+DeckProj/.vs
+DeckProj/*.csproj
+DeckProj/.vsconfig
+DeckProj/Assembly-CSharp.csproj
+DeckProj/Assembly-CSharp-Editor.csproj
+DeckProj/Assembly-CSharp-Editor-firstpass.csproj
+DeckProj/Assembly-CSharp-firstpass.csproj
