@@ -7,27 +7,33 @@ namespace Bamboom.Framework
 {
     public class CoroutineMgr : MonoBehaviour
     {
-        public static CoroutineMgr Instance { get {
-                if (Instance == null)
+        private static CoroutineMgr _ins;
+
+        /// <summary>
+        /// 运行Coroutine的实列
+        /// </summary>
+        public static CoroutineMgr Instance {
+            get {
+                if (_ins == null)
                 {
-                    var ins = new GameObject("CoroutineMgr");
-                    Instance = ins.AddComponent<CoroutineMgr>();    
+                    var gm = new GameObject("CoroutineMgr");
+                    _ins = gm.AddComponent<CoroutineMgr>();    
                 }
-                return Instance;
+                return _ins;
             } 
             set {
-                if (Instance != null)
+                if (_ins != null)
                 {
-                    Destroy(Instance.gameObject);
+                    Destroy(_ins.gameObject);
                 }
-                Instance = value;
+                _ins = value;
             } }
 
-        public static Coroutine StartCoroutine(IEnumerator enumerator, bool doNotDestroy = false)
+        public static Coroutine StartCoroutine(IEnumerator enumerator, bool doNotDestroy)
         {
             if (doNotDestroy) { DontDestroyOnLoad(Instance); }
 
-            return (Instance as MonoBehaviour).StartCoroutine(enumerator);
+            return Instance.StartCoroutine(enumerator);
         }
 
         public static new void StopCoroutine(IEnumerator enumerator)
@@ -44,14 +50,27 @@ namespace Bamboom.Framework
 
     public class TimeHold
     {
+        /// <summary>
+        /// 在若干秒后执行操作
+        /// </summary>
+        /// <param name="action">操作</param>
+        /// <param name="duration">延迟秒</param>
+        /// <param name="inRealTime">true: 真实时间 false: 游戏时间</param>
+        /// <returns></returns>
         public static Coroutine DoActionAfterSec(Action action, float duration, bool inRealTime = false)
         {
-            return CoroutineMgr.StartCoroutine(ActionDelaySec(action, duration, inRealTime));
+            return CoroutineMgr.StartCoroutine(ActionDelaySec(action, duration, inRealTime), false);
         }
 
+        /// <summary>
+        /// 在若干帧后执行操作
+        /// </summary>
+        /// <param name="action">操作</param>
+        /// <param name="num">延迟帧</param>
+        /// <returns></returns>
         public static Coroutine DoActionAfterFrame(Action action, int num = 1)
         {
-            return CoroutineMgr.StartCoroutine(ActionDelayFrame(action, num));
+            return CoroutineMgr.StartCoroutine(ActionDelayFrame(action, num), false);
         }
 
         private static IEnumerator ActionDelaySec(Action action, float duration, bool inRealTime)
